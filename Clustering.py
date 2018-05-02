@@ -44,3 +44,37 @@ class Clustering(object):
             return fetch_20newsgroups(subset=subset_var, random_state=42, shuffle=True)
 
         return fetch_20newsgroups(subset=subset_var, categories=category_list, random_state=42, shuffle=True)
+
+
+    def get_stop_words(self):
+        """
+        Returns a list of stop words
+        """
+        return text.ENGLISH_STOP_WORDS #contains 318 stop words
+
+
+    def get_stemmer(self):
+        """
+        Snowball stemmer in English performs better than PorterStemmer
+        Example : stem("generously") with Porter gives "gener" while SnowballStemmer gives "generous"
+        """
+        #return PorterStemmer()
+        return SnowballStemmer("english")
+
+    def preprocess(self, txt):
+        """
+        Takes a string and preprocesses it by:
+            1. Removing all characters other than alphabets.
+            2. Split the string into words
+            3. Removing the stop words
+            4. Removing the words with length less than 3
+            5. Join the list of words back to a sentence.
+
+        Stemming is not done
+        """
+
+        txt = re.sub(r'[^a-zA-Z]+', ' ', txt)
+        words = txt.split()
+        stop_words = self.get_stop_words()
+        words = [word.lower() for word in words if word not in stop_words and len(word) > 2]
+        return ' '.join(words)
