@@ -107,3 +107,19 @@ class Clustering(object):
 
         print "Dimension of TF-IDF features with min_df = ", df, " : ", tfidf.shape
         return tfidf
+
+
+    def kmeans(self, data, features, clusters = 2, threshold = 1):
+        """
+        Runs k-means on given input to find given number of clusters.
+        Data is used to get the target labels
+        Features are the actual values upon which K-means is performed.
+        Threshold value is used to map higher values of labels to number of clusters.
+        """
+
+        print "In K-Means : Input data dimension - ", features.shape
+
+        actual_labels = data.target / threshold #To split the target values into groups
+
+        kmeans_result = KMeans(n_clusters=clusters, random_state=1, init='k-means++').fit(features)
+        return self.get_metrics(actual_labels, kmeans_result.labels_), kmeans_result
