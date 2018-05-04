@@ -78,3 +78,32 @@ class Clustering(object):
         stop_words = self.get_stop_words()
         words = [word.lower() for word in words if word not in stop_words and len(word) > 2]
         return ' '.join(words)
+
+
+    def collect_data(self, categories = []):
+        """
+        Given the list of categories, retrieve the newsgroup data.
+        """
+
+        news_data = self.get_data(categories, subset_var= 'all')
+        return news_data
+
+    def get_tfidf(self, news_data, df = 3):
+        """
+        Training and testing data are preprocessed.
+        Countvectorizer and TfidfTransformer are used to extract TF-IDF features.
+        """
+
+        for i in range(len(news_data.data)):
+            news_data.data[i] = self.preprocess(news_data.data[i])
+
+
+        cv = CountVectorizer(min_df=df)
+        tf = TfidfTransformer()
+
+        counts = cv.fit_transform(news_data.data)
+        tfidf = tf.fit_transform(counts)
+
+
+        print "Dimension of TF-IDF features with min_df = ", df, " : ", tfidf.shape
+        return tfidf
