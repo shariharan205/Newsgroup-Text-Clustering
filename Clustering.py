@@ -149,3 +149,36 @@ class Clustering(object):
 
         return measure_scores
 
+    def svd_variance_plot(self, features, dimensions = 1000):
+        """
+        Plot variance retained vs dimensions for SVD for given dimension
+        """
+        """
+        svd = TruncatedSVD(n_components=dimensions)
+        svd.fit_transform(features)
+        variance_retained = np.cumsum(svd.explained_variance_ratio_)
+        plt.plot(np.arange(dimensions), variance_retained*100)
+        plt.xlabel('Dimensions', fontsize=15)
+        plt.ylabel('Percentage Variance Retained', fontsize=15)
+        plt.title('Dimensions vs Percentage Variance Retained for SVD')
+        plt.savefig('VarianceRetained.png', format='png')
+        plt.show()
+        """
+
+        from scipy.sparse.linalg import svds
+        u, s, v = svds(features, k=dimensions)
+
+        xxt = np.dot(features, features.T)
+        trace_xxt = np.trace(xxt)
+
+        sst = np.dot(s, s.T)
+        sst_diag = sst.diagonal()
+
+        a = [ np.sum(sst_diag[:i+1])/float(trace_xxt) for i in range(1001)]
+        plt.plot(np.arange(dimensions), a*100)
+        plt.xlabel('Dimensions', fontsize=15)
+        plt.ylabel('Percentage Variance Retained', fontsize=15)
+        plt.title('Dimensions vs Percentage Variance Retained for SVD')
+        plt.savefig('VarianceRetained.png', format='png')
+        plt.show()
+
