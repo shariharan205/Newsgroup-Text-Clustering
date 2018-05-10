@@ -124,3 +124,28 @@ class Clustering(object):
         kmeans_result = KMeans(n_clusters=clusters, random_state=1, init='k-means++').fit(features)
         return self.get_metrics(actual_labels, kmeans_result.labels_), kmeans_result
 
+
+    def get_metrics(self, actual, predicted):
+        """
+        Given actual and predicted labels, this method calculates the purity metrics
+        """
+
+        measure_scores = {
+            "Contingency Matrix" : metrics.confusion_matrix(actual, predicted),
+            "Homogeneity" :  metrics.homogeneity_score(actual, predicted),
+            "Completeness" : metrics.completeness_score(actual, predicted),
+            "V-measure" : metrics.v_measure_score(actual, predicted),
+            "Adjusted Rand Score" : metrics.adjusted_rand_score(actual, predicted),
+            "Adjusted Mutual Info Score" : metrics.adjusted_mutual_info_score(actual, predicted)
+        }
+
+
+        print "\nContingency Matrix: \n", measure_scores["Contingency Matrix"]
+        print "\nHomogeneity : ", measure_scores["Homogeneity"]
+        print "Completeness : ", measure_scores["Completeness"]
+        print "V-measure : " , measure_scores["V-measure"]
+        print "Adjusted Rand score : ", measure_scores["Adjusted Rand Score"]
+        print "Adjusted Mutual Info Score : ", measure_scores["Adjusted Mutual Info Score"]
+
+        return measure_scores
+
