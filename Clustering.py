@@ -182,3 +182,73 @@ class Clustering(object):
         plt.savefig('VarianceRetained.png', format='png')
         plt.show()
 
+
+
+    def reset_homogeneity(self):
+        self.max_homogeneity = -float("inf")
+
+
+    def dimension_testing(self, args):
+        """
+        For given dimension range, perform Kmeans and plot metrics
+        """
+
+        obj = self.dim_obj_map[args["technique"]]
+        num_clusters = args["num_clusters"]
+        dimension_range = args["dimension_range"]
+        technique = args["technique"]
+        features = args["features"]
+        best_r_val = args.get("best_r_val")
+
+        threshold = 4 if num_clusters == 2 else 1
+        homogeneity, completeness, vmeasure, adj_rand, adj_mutual = [], [], [], [], []
+
+
+        for r in dimension_range:
+            print "Number of clusters - ", num_clusters, "  Number of dimensions - ", r
+            features_r = obj(n_components = r).fit_transform(features)
+
+            if args.get("tf"):
+                for method in args["tf"]:
+                    features = getattr(self, method)(features)
+
+            scores, _ = self.kmeans(args["data"], features_r, clusters=num_clusters, threshold=threshold)
+
+            plt.matshow(scores["Contingency Matrix"])
+            title = technique + ' num_clusters ' + str(num_clusters) + ' num_dimensions ' + str(r)
+            plt.title(title)
+            if args.get("tf"):
+                title += " " + str(args["tf"])
+            plt.savefig(title + '.png', format = 'png')
+            plt.show()
+
+            homogeneity.append(scores["Homogeneity"])
+            completeness.append(scores["Completeness"])
+            vmeasure.append(scores["V-measure"])
+            adj_rand.append(scores["Adjusted Rand Score"])
+            adj_mutual.append(scores["Adjusted Mutual Info Score"])
+
+
+        if self.max_homogeneity < np.max(homogeneity):
+            best_r_val = dimension_range[np.argmax(homogeneity)]
+            self.max_homogeneity = np.max(homogeneity)
+
+        plt.plot(dimension_range, homogeneity, label = "Homogeneity")
+        plt.plot(dimension_range, completeness,label = "Completeness")
+        plt.plot(dimension_range, vmeasure, label = "VMeasure")
+        plt.plot(dimension_range, adj_rand, label = "Adjusted Rand score")
+        plt.plot(dimension_range, adj_mutual, label = "Adjusted Mutual Info Score")
+        plt.xlabel('Dimensions', fontsize=15)
+        plt.ylabel('Purity Measures', fontsize=15)
+        if args.get("tf"):
+            plt.title(technique + "  " + str(args["tf"]))
+        else:
+            plt.title('Measures vs #dimensions for ' + technique)
+        plt.legend()
+        #plt.xscale('log')
+        plt.show()
+        title = technique + ' num_clusters ' + str(num_clusters) + ' dimensions ' + str(dimension_range) + ' clusters ' + str(num_clusters)
+        plt.savefig(title + '.png', format="png")
+
+        return best_r_val
+
