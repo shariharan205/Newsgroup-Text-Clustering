@@ -252,3 +252,27 @@ class Clustering(object):
 
         return best_r_val
 
+    def normalize_transform(self, data):
+        """
+        Normalizes given data
+        """
+
+        try:
+
+            scaler = StandardScaler()
+            scaler.fit(data)
+            return scaler.transform(data)
+
+        except:
+            normalizer = Normalizer()
+            normalizer.fit(data)
+            return normalizer.transform(data)
+
+    def log_transform(self, data):
+        """
+        Converts all values to their log values
+        """
+
+        return np.log1p(data) if np.all(data > 0) else np.log1p(data - np.min(data))
+
+
