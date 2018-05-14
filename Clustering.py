@@ -276,3 +276,35 @@ class Clustering(object):
         return np.log1p(data) if np.all(data > 0) else np.log1p(data - np.min(data))
 
 
+    def pca(self, args):
+        """
+        Performs principal component analysis - plots a scatter plot in 2D with expected number of clusters
+        """
+
+        technique = args["technique"]
+        best_dimension = args["best_dimension"]
+        features = args["features"]
+        transformations = args.get("transformations")
+        data = args.get("data")
+        threshold = args.get("threshold", 1)
+        n_clusters = args.get("n_clusters", 2)
+        plot_title = args.get("plot_title", "")
+
+        obj = self.dim_obj_map[technique]
+        features = obj(n_components=best_dimension).fit_transform(features)
+
+        if transformations:
+            for method in transformations:
+                features = getattr(self, method)(features)
+
+            _, kmeans_result = self.kmeans(data, features, clusters=n_clusters, threshold=threshold)
+
+        else:
+            kmeans_result = KMeans(n_clusters=n_clusters, random_state=0, init='k-means++').fit(features)
+
+        plt.scatter(features[:,0], features[:,1], c = kmeans_result.labels_, marker='+')
+        plt.xlabel('Principal Component 1', fontsize=15)
+        plt.ylabel('Principal Component 2', fontsize=15)
+        plt.title('Clustering visualization for ' + technique + plot_title)
+        plt.show()
+        plt.savefig("PCA - " + technique + " dim = " + str(best_dimension) + str(transformations))
