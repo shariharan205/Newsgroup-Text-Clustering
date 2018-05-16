@@ -308,3 +308,42 @@ class Clustering(object):
         plt.title('Clustering visualization for ' + technique + plot_title)
         plt.show()
         plt.savefig("PCA - " + technique + " dim = " + str(best_dimension) + str(transformations))
+
+
+    def perform_transformations(self, args):
+        """
+        Performs Normalization for SVD
+        Performs Normalization, Log Transform, Log-Normalization, Normalization log for NMF
+        """
+        best_r = args["best_r"]
+        args["technique"] = "lsi"
+        args["best_dimension"] = best_r[args["technique"]]
+
+        print "\nNormalizing data for LSI"
+        args["transformations"] = ["normalize_transform"]
+        args["plot_title"] = " normalized"
+        self.pca(args)
+
+        args["technique"] = "nmf"
+        args["best_dimension"] = best_r[args["technique"]]
+
+        print "\nNormalizing data for NMF......................"
+        args["transformations"] = ["normalize_transform"]
+        args["plot_title"] = " normalized"
+        self.pca(args)
+
+        print "\nLog transform data for NMF................."
+        args["transformations"] = ["log_transform"]
+        args["plot_title"] = " log transform"
+        self.pca(args)
+
+        print "\nNormalizing and then applying log transformation for NMF..................."
+        args["transformations"] = ["normalize_transform", "log_transform"]
+        args["plot_title"] = " normalize and log"
+        self.pca(args)
+
+        print "\nLog transformation and then normalizing data for NMF........................"
+        args["transformations"] = ["log_transform", "normalize_transform"]
+        args["plot_title"] = " log and normalize"
+        self.pca(args)
+
