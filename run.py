@@ -10,3 +10,18 @@ def breakpoint():
 
     if inp != 'y':
         exit()
+
+print "========================================================================================================\n"
+
+techniques = ["lsi", "nmf"]
+ct_ra_categories = ['comp.graphics', 'comp.os.ms-windows.misc', 'comp.sys.ibm.pc.hardware', 'comp.sys.mac.hardware',
+                    'rec.autos', 'rec.motorcycles', 'rec.sport.baseball', 'rec.sport.hockey']
+
+cluster = Clustering()
+
+print "\n=============================================================================================\n"
+print "Collecting Computer Technology and Recreational Activity data.........."
+ct_ra_data = cluster.collect_data(ct_ra_categories)
+print "Performing TF-IDF........"
+tfidf = cluster.get_tfidf(ct_ra_data, df=3)
+breakpoint()
