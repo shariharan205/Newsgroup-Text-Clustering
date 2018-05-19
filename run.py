@@ -25,3 +25,9 @@ ct_ra_data = cluster.collect_data(ct_ra_categories)
 print "Performing TF-IDF........"
 tfidf = cluster.get_tfidf(ct_ra_data, df=3)
 breakpoint()
+
+
+print "\n=============================================================================================\n"
+print "K-Means for k=2 and collecting metrics.........."
+cluster.kmeans(ct_ra_data, tfidf, clusters=2, threshold=4)
+breakpoint()
