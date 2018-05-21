@@ -31,3 +31,8 @@ print "\n=======================================================================
 print "K-Means for k=2 and collecting metrics.........."
 cluster.kmeans(ct_ra_data, tfidf, clusters=2, threshold=4)
 breakpoint()
+
+
+print "\n=============================================================================================\n"
+print "Plotting the variance retained for 1 to 1000 dimensions in SVD"
+cluster.svd_variance_plot(tfidf, dimensions=1000)
