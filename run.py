@@ -36,3 +36,20 @@ breakpoint()
 print "\n=============================================================================================\n"
 print "Plotting the variance retained for 1 to 1000 dimensions in SVD"
 cluster.svd_variance_plot(tfidf, dimensions=1000)
+
+print "\n=============================================================================================\n"
+print "Plotting metrics for k=2 clusters for different dimensions in SVD and NMF"
+dimension_range = [1, 2, 3, 5, 10, 20, 50, 100, 300]
+best_r = {}
+args = {
+         "data" : ct_ra_data,
+         "features" : tfidf,
+         "dimension_range" : dimension_range,
+         "num_clusters" : 2
+       }
+for technique in techniques:
+    print "\nDimension Reduction Technique : ", technique
+    args["technique"] = technique
+    best_r[technique] = cluster.dimension_testing(args)
+    print "\nBest dimension found - ", best_r[technique]
+    breakpoint()
