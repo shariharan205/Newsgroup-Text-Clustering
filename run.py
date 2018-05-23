@@ -53,3 +53,14 @@ for technique in techniques:
     best_r[technique] = cluster.dimension_testing(args)
     print "\nBest dimension found - ", best_r[technique]
     breakpoint()
+
+
+print "\n=============================================================================================\n"
+print "Visualizing best clustering results using PCA"
+
+args = {
+            "n_clusters" : 2,
+            "threshold" : 4,
+            "data" : ct_ra_data,
+            "features" : tfidf
+        }
