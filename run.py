@@ -64,3 +64,27 @@ args = {
             "data" : ct_ra_data,
             "features" : tfidf
         }
+
+
+for technique in techniques:
+    print "Dimension Reduction Technique : ", technique
+    args["technique"] = technique
+    args["best_dimension"] = best_r[technique]
+    cluster.pca(args)
+    breakpoint()
+
+print "\n=============================================================================================\n"
+
+print "Transformations...................."
+
+cluster.perform_transformations(args)
+
+
+print "\n=============================================================================================\n"
+print "Experimenting with 20 sub-class labels with clustering............."
+
+print "Collecting all 20 sub classes data.........."
+all_data = cluster.collect_data()
+print "Performing TF-IDF........"
+tfidf = cluster.get_tfidf(all_data, df=3)
+breakpoint()
