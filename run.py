@@ -88,3 +88,15 @@ all_data = cluster.collect_data()
 print "Performing TF-IDF........"
 tfidf = cluster.get_tfidf(all_data, df=3)
 breakpoint()
+
+
+print "Trying out different dimension ranges for 20 clusters"
+list_dim_ranges = [[1,2,3,4,5], [10,20,30,40,50,60], [100, 150, 200, 250, 300]]
+
+args = {
+         "data" : all_data,
+         "features" : tfidf,
+         "num_clusters" : 20
+       }
+
+best_r = {}
