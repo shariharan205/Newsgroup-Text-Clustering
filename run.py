@@ -100,3 +100,17 @@ args = {
        }
 
 best_r = {}
+
+for technique in techniques:
+    print "Dimension reduction using - ", technique
+    args["technique"] = technique
+    args["best_r_value"] = None
+    cluster.reset_homogeneity()
+    for dimension_range in list_dim_ranges:
+        print "Testing for dimensions - ", dimension_range
+        args["dimension_range"] = dimension_range
+        best_r_val = cluster.dimension_testing(args)
+        breakpoint()
+
+    best_r[technique] = best_r_val
+    print "Best Dimension found - ", best_r_val, " for technique ", technique
