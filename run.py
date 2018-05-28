@@ -114,3 +114,26 @@ for technique in techniques:
 
     best_r[technique] = best_r_val
     print "Best Dimension found - ", best_r_val, " for technique ", technique
+
+
+print "\nVisualizing results for 20 clusters......................."
+
+args = {
+            "n_clusters" : 20,
+            "threshold" : 1,
+            "data" : all_data,
+            "features" : tfidf,
+            "best_r" : best_r
+        }
+
+
+for technique in techniques:
+    print "Dimension Reduction Technique : ", technique
+    args["technique"] = technique
+    args["best_dimension"] = best_r[technique]
+    cluster.pca(args)
+    breakpoint()
+
+
+print "Transformations for 20 clusters...................."
+cluster.perform_transformations(args)
